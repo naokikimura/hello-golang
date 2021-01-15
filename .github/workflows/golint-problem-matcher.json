@@ -1,0 +1,18 @@
+{
+    "problemMatcher": [
+        {
+            "owner": "golint",
+            "pattern": [
+                {
+                    "regexp": "^(.+):(\\d+):(\\d+):\\s(.+)\\s\\(Rule:(\\w+),\\sSeverity:(\\w+),\\sConfidence:(\\w+)\\)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 6,
+                    "message": 4,
+                    "code": 5
+                }
+            ]
+        }
+    ]
+}

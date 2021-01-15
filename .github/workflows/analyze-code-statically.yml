@@ -1,0 +1,21 @@
+name: Analyze code statically
+"on": [pull_request]
+jobs:
+  gosec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+      - name: Setup
+        env:
+          PERSONAL_ACCESS_TOKEN: 00452d311ba02fd052d68afe3193af0393170ce4
+        run: |
+          git config --global url."https://${PERSONAL_ACCESS_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+          ./scripts/bootstrap
+
+          echo '::add-matcher::.github/workflows/golint-problem-matcher.json'
+      - name: Analyze code statically using gosec
+        run: |
+          go get github.com/securego/gosec/v2/cmd/gosec
+          gosec -quiet -no-fail -fmt=golint ./... | sed -e "s|^${PWD}/||"
