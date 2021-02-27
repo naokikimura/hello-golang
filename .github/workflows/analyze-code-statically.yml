@@ -1,0 +1,26 @@
+---
+name: Analyze code statically
+"on":
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  reviewdog:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "GOPATH=$(go env GOPATH)" >> $GITHUB_ENV
+      - run: echo "$GOPATH/bin" >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ${{ env.GOPATH }}/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - run: |
+          curl -sSfL https://raw.githubusercontent.com/securego/gosec/master/install.sh |
+            sh -s -- -b $(go env GOPATH)/bin
+      - uses: reviewdog/action-setup@v1
+      - run: reviewdog -reporter=github-check -tee
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
