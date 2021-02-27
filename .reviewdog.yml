@@ -1,0 +1,5 @@
+---
+runner:
+  gosec:
+    cmd: gosec -conf .gosecrc.json -fmt golint ./...
+    format: gosec
