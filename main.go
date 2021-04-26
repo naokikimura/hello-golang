@@ -5,6 +5,8 @@ import (
     "fmt"
     "io"
     "math/rand"
+
+    "nhooyr.io/websocket"
 )
 
 func main() {
@@ -18,4 +20,6 @@ func main() {
     h := sha1.New()
     io.WriteString(h, "His money is twice tainted:")
     fmt.Printf("% x", h.Sum(nil))
+
+    fmt.Println(websocket.StatusPolicyViolation)
 }
